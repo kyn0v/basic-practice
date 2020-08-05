@@ -1,6 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <winsock2.h>
 
 #include <iostream>
@@ -12,16 +14,17 @@ using namespace std;
 using namespace cv;
 
 enum SOCKETDATATYPE {
-    IMAGE_DATA = 1,   // 图像数据
-    CONTROL_DATA = 2  // 控制数据
+    IMAGE_DATA = 1,
+    CONTROL_DATA = 2
 };
 
 class SocketServerTCP {
    public:
     bool init(int port);
     bool connect();
-    bool receive(char *buffer, int buffer_size, SOCKETDATATYPE &type, int &size);
     void disconnect();
+    bool transmit(char *data, int size);
+    bool receive(char buffer[], int buffer_size, SOCKETDATATYPE &type, int &size);
     void cleanup();
 
    private:
@@ -71,23 +74,38 @@ void SocketServerTCP::disconnect() {
     closesocket(connectionSocket);
 }
 
-bool SocketServerTCP::receive(char *buffer, int buffer_size, SOCKETDATATYPE &type, int &size) {
-    size = recv(connectionSocket, buffer, buffer_size, 0);
+bool SocketServerTCP::transmit(char *data, int size) {
+    if (send(connectionSocket, data, size, 0) < 0) {
+        printf("send control data error!\n");
+        return false;
+    }
+    return true;
+}
+
+bool SocketServerTCP::receive(char buffer[], int buffer_size, SOCKETDATATYPE &type, int &size) {
+    int ret = recv(connectionSocket, buffer, buffer_size, 0);
+    char size_str[9];
+    strncpy(size_str, buffer + 1, 9);
+    size = atoi(size_str);
     if (size < 0) {
         printf("server receive data failed!\n");
         return false;
     }
+    int rest_size = (size + 10) - ret;
+    while (rest_size > 0) {  // 填充缓冲区，直到数据完整接收
+        ret = recv(connectionSocket, buffer + ret, buffer_size, 0);
+        rest_size -= ret;
+    }
+
     if (buffer[0] == '#') {
         type = IMAGE_DATA;
-        size--;
         for (int i = 0; i < size; i++) {
-            buffer[i] = buffer[i + 1];
+            buffer[i] = buffer[i + 10];
         }
     } else if (buffer[0] == '*') {
         type = CONTROL_DATA;
-        size--;
         for (int i = 0; i < size; i++) {
-            buffer[i] = buffer[i + 1];
+            buffer[i] = buffer[i + 10];
         }
     } else {
         printf("unknown SOCKETDATATYPE!\n");
@@ -107,7 +125,6 @@ int main() {
     Mat image;
     while (true) {
         ss.connect();
-		// 数据接收缓冲区
         char buffer[100000];
         SOCKETDATATYPE type;
         int size;
@@ -121,11 +138,7 @@ int main() {
             Mat image = imdecode(image_decode, CV_LOAD_IMAGE_COLOR);
             imshow("image", image);
             waitKey(30);
-        } else if(type == CONTROL_DATA){
-			for(int i=0; i< size; i++){
-				printf("%s", buffer[i]);
-			}
-		} else {
+        } else {
             printf("unknown SOCKETDATATYPE!");
         }
         ss.disconnect();
