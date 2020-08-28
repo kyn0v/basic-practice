@@ -21,8 +21,8 @@ int main() {
     for (int i = 0; i < n; i++) {
         cin >> nums[i];
     }
-    greaterCustom<int> functor(threshold);
-    cnt = count_if(nums.begin(), nums.end(), functor);
+    // greaterCustom<int> functor(threshold);
+    cnt = count_if(nums.begin(), nums.end(), greaterCustom<int> (threshold));
     cout << cnt << endl;
     return 0;
 }
