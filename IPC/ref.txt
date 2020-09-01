@@ -1,2 +1,3 @@
-http://blog.chinaunix.net/uid-26833883-id-3227144.html
-http://blog.chinaunix.net/uid-26833883-id-3230564.html
+管道：http://blog.chinaunix.net/uid-26833883-id-3227144.html
+共享内存：http://blog.chinaunix.net/uid-26833883-id-3230564.html
+消息队列：https://blog.csdn.net/yang_yulei/article/details/19772649

@@ -1,3 +1,5 @@
+// task: 父进程读取文件的内容，写到无名管道，子进程从管道中读取内容写到另一个文件。
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

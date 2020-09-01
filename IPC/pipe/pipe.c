@@ -1,3 +1,5 @@
+// task: 父进程向管道中写数据，子进程从管道中读取数据
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
