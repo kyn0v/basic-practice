@@ -1,9 +1,10 @@
-/*******************************************************
-进制转换工具类
+/***********************************
+进制转换工具
 
-Created by kyn0v.
-2020.08.15
-********************************************************/
+Written by kynov.
+
+2020.09.17
+***********************************/
 
 #pragma once
 #include <stdio.h>
@@ -15,16 +16,16 @@ Created by kyn0v.
 
 using std::string;
 
-int IsHex(char hc);
+int IsHexChar(char hc);
 
 unsigned char Hex2Ascii(const string & hex);
 
 int HexString2Int(string hexstr);
 
-string HexString2AsciiString(const string & hex);
+string HexString2AsciiString(string hex);
 
 string AsciiString2HexString(char * data, int len);
 
 string Dec2HexString(int dec, int length);
 
-string PrepareAsciiString(string str);
+string PrepareAsciiCmd(string str);
