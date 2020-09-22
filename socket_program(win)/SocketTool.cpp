@@ -1,4 +1,4 @@
-#include "SocketCustom.h"
+#include "SocketTool.h"
 
 using namespace std;
 using namespace cv;
@@ -99,7 +99,7 @@ bool SocketClientTCP::receive(char *buffer, int buffer_size)
 {
 	int ret = recv(clientSocket, buffer, buffer_size, 0);
 	if (ret > 0) {
-		// You can test the received data here.
+		// You can check the received data here.
 		return true;
 	}
 	return false;
@@ -167,9 +167,12 @@ bool SocketServerTCP::transmit(char * data, int size)
 	return true;
 }
 
-bool SocketServerTCP::receive(char *buffer, int buffer_size, SOCKETDATATYPE &type, int &size)
+bool SocketServerTCP::receive(char *buffer, int buffer_size, SOCKETDATATYPE &type, int &size, bool is_raw)
 {
 	int ret = recv(connectionSocket, buffer, buffer_size, 0);
+	if (is_raw) {	// 数据不解析，返回原始数据
+		return true;
+	}
 	char size_str[9];
 	strncpy(size_str, buffer + 1, 9);
 	size = atoi(size_str);
@@ -182,27 +185,28 @@ bool SocketServerTCP::receive(char *buffer, int buffer_size, SOCKETDATATYPE &typ
 		printf("server receive data failed!\n");
 		return false;
 	}
-	if (buffer[0] == '#') {	//接收到图片
-		type = IMAGE_DATA;
-		for (int i = 0; i < size; i++) {
-			buffer[i] = buffer[i + 10];
-		}
-	}
-	else if (buffer[0] == '*') {	//接收到控制信号
-		type = PTZINFO_DATA;
-		for (int i = 0; i < size; i++) {
-			buffer[i] = buffer[i + 10];
-		}
-	}
-	else if (buffer[0] == '@') {	//接收到控制信号
-		type = CTRL_DATA;
-		for (int i = 0; i < size; i++) {
-			buffer[i] = buffer[i + 10];
-		}
-	}
-	else {
-		printf("unknown SOCKETDATATYPE!\n");
-		return false;
+	switch (buffer[0]) {
+		case '#':	// 接收图片
+			type = IMAGE_DATA;
+			for (int i = 0; i < size; i++) {
+				buffer[i] = buffer[i + 10];
+			}
+			break;
+		case '*':	// 接收
+			type = PTZINFO_DATA;
+			for (int i = 0; i < size; i++) {
+				buffer[i] = buffer[i + 10];
+			}
+			break;
+		case '@':
+			type = CTRL_DATA;
+			for (int i = 0; i < size; i++) {
+				buffer[i] = buffer[i + 10];
+			}
+			break;
+		default:
+			printf("unknown SOCKETDATATYPE!\n");
+			return false;
 	}
 	return true;
 }

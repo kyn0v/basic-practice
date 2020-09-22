@@ -19,9 +19,9 @@ using namespace std;
 
 enum SOCKETDATATYPE
 {
-	IMAGE_DATA = 1,	// 图像帧标志位#
-	PTZINFO_DATA = 2, // 云台信息标志位*
-	CTRL_DATA = 3 // 云台控制信号标志位%
+	IMAGE_DATA = 1,	// 图像帧信息标志位#
+	PTZINFO_DATA = 2, // 控制云台信号标志位*（按指定角度移动）
+	CTRL_DATA = 3 // 控制云台信号标志位%（按方向移动）
 };
 
 typedef struct {
@@ -58,7 +58,7 @@ public:
 	bool connect();
 	void disconnect();
 	bool transmit(char *data, int size);
-	bool receive(char *buffer, int buffer_size, SOCKETDATATYPE &type, int &size);
+	bool receive(char *buffer, int buffer_size, SOCKETDATATYPE &type, int &size, bool is_raw);
 	void cleanup();
 private:
 	SOCKET serverSocket;
