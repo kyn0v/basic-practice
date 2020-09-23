@@ -1,0 +1,3 @@
+条件变量：
+https://blog.csdn.net/YEYUANGEN/article/details/37593533
+https://www.ibm.com/developerworks/cn/linux/thread/posix_thread2/index.html
