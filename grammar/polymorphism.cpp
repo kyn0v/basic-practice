@@ -6,8 +6,8 @@ class Base {
     virtual void f(float x) {
         cout << "Base::f(float): " << x << endl;
     }
-    virtual void f(int x) { // 重载：必须在同一个域中
-        cout << "Base::f(int): " << x << endl;
+    void f(char x) { // 重载：在同一个域中
+        cout << "Base::f(char): " << x << endl;
     }
     void g(float x) {
         cout << "Base::g(float): " << x << endl;
@@ -22,7 +22,7 @@ class Base {
 
 class Derived : public Base {
    public:
-    // 子类函数与基类函数同名，有virtual关键字 -> 运行时多态
+    // 子类函数与基类函数同名同参数，有virtual关键字 -> 运行时多态(override)
     virtual void f(float x) {
         cout << "Derived::f(float): " << x << endl;
     }
@@ -36,7 +36,7 @@ class Derived : public Base {
     }
     // 子类函数与基类函数同名（参数也相同），有virtual关键字 -> 覆盖（重写）
     virtual void i(float x) {
-        cout << "Base::i(float): " << x << endl;
+        cout << "Derived::i(float): " << x << endl;
     }
 };
 
@@ -46,7 +46,7 @@ int main(){
     Derived *p_derived = &derived; // 子类指针指向子类对象
     
     // Good: 行为仅取决于对象的类型
-    p_base->f(3.14);
+    p_base->f(float(3.14));
     p_derived->f(3.14);
 
     // Bad: 行为取决于指针类型
@@ -57,14 +57,13 @@ int main(){
     p_base->h(3.14);
     p_derived->h(3.14);
 
-    // 覆盖（重写）
-    p_base->i(3.14);
-    p_derived->i(3.14);
 
-    // 重载
-    p_base->f(3);
-    p_derived->f(3);
+    p_base->f('3'); // 重载
+    p_base->f(float(3)); // 覆盖
+    p_derived->f(char('3')); // 覆盖 base::f(float) + 隐藏 base::f(char)
+    p_derived->f(float(3));
 
     system("pause");
     return 0;
 }
+
