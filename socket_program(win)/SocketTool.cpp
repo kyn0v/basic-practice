@@ -1,10 +1,7 @@
 #include "SocketTool.h"
 
-using namespace std;
-using namespace cv;
-
-//--------------------ClientÇëÇó(TCP)---------------------
-bool SocketClientTCP::init(string ip, int port)
+//--------------------Clientè¯·æ±‚(TCP)---------------------
+bool SocketClientTCP::init(char *ip, int port)
 {
 	WORD sockVersion = MAKEWORD(2, 2);
 	WSADATA data;
@@ -15,7 +12,7 @@ bool SocketClientTCP::init(string ip, int port)
 	}
 	clientAddr.sin_family = AF_INET;
 	clientAddr.sin_port = htons(port);
-	clientAddr.sin_addr.S_un.S_addr = inet_addr(ip.c_str());
+	clientAddr.sin_addr.S_un.S_addr = inet_addr(ip);
 	return true;
 }
 
@@ -40,9 +37,9 @@ void SocketClientTCP::disconnect()
 
 bool SocketClientTCP::transmit(char * data, int size, SOCKETDATATYPE type)
 {
-	if (type == IMAGE_DATA) {	// ·¢ËÍÍ¼ÏñÊı¾İ
-		char image_buffer[100000];
-		char flag[10];	// ±êÖ¾Î»'#'1Î» + Êı¾İ³¤¶È9Î»
+	if (type == IMAGE_DATA) {	// å‘é€å›¾åƒæ•°æ®
+		char image_buffer[1000000];
+		char flag[10];	// æ ‡å¿—ä½'#'1ä½ + æ•°æ®é•¿åº¦9ä½
 		sprintf(flag, "#%09d", size);
 		for (int i = 0; i < 10; ++i) {
 			image_buffer[i] = flag[i];
@@ -56,10 +53,10 @@ bool SocketClientTCP::transmit(char * data, int size, SOCKETDATATYPE type)
 			return false;
 		}
 	}
-	else if (type == PTZINFO_DATA) {	// ·¢ËÍÔÆÌ¨ĞÅÏ¢
+	else if (type == PTZINFO_DATA) {	// å‘é€äº‘å°ä¿¡æ¯
 		char control_buffer[50];
 		char flag[10];
-		sprintf(flag, "*%09d", size); 	// ±êÖ¾Î»'*'1Î» + Êı¾İ³¤¶È9Î» 
+		sprintf(flag, "*%09d", size); 	// æ ‡å¿—ä½'*'1ä½ + æ•°æ®é•¿åº¦9ä½ 
 		for (int i = 0; i < 10; ++i) {
 			control_buffer[i] = flag[i];
 		}
@@ -72,10 +69,10 @@ bool SocketClientTCP::transmit(char * data, int size, SOCKETDATATYPE type)
 			return false;
 		}
 	}
-	else if (type == CTRL_DATA) {	// ·¢ËÍ¿ØÖÆĞÅºÅ
+	else if (type == CTRL_DATA) {	// å‘é€æ§åˆ¶ä¿¡å·
 		char control_buffer[50];
 		char flag[10];
-		sprintf(flag, "@%09d", size);	// ±êÖ¾Î»'@'1Î» + Êı¾İ³¤¶È9Î»
+		sprintf(flag, "@%09d", size);	// æ ‡å¿—ä½'@'1ä½ + æ•°æ®é•¿åº¦9ä½
 		for (int i = 0; i < 10; ++i) {
 			control_buffer[i] = flag[i];
 		}
@@ -110,7 +107,7 @@ void SocketClientTCP::cleanup()
 	WSACleanup();
 }
 
-//--------------------Server¼àÌı(TCP)---------------------
+//--------------------Serverç›‘å¬(TCP)---------------------
 bool SocketServerTCP::init(int port)
 {
 	WORD sockVersion = MAKEWORD(2, 2);
@@ -170,7 +167,7 @@ bool SocketServerTCP::transmit(char * data, int size)
 bool SocketServerTCP::receive(char *buffer, int buffer_size, SOCKETDATATYPE &type, int &size, bool is_raw)
 {
 	int ret = recv(connectionSocket, buffer, buffer_size, 0);
-	if (is_raw) {	// Êı¾İ²»½âÎö£¬·µ»ØÔ­Ê¼Êı¾İ
+	if (is_raw) {	// æ•°æ®ä¸è§£æï¼Œè¿”å›åŸå§‹æ•°æ®
 		return true;
 	}
 	char size_str[9];
@@ -186,13 +183,13 @@ bool SocketServerTCP::receive(char *buffer, int buffer_size, SOCKETDATATYPE &typ
 		return false;
 	}
 	switch (buffer[0]) {
-		case '#':	// ½ÓÊÕÍ¼Æ¬
+		case '#':	// æ¥æ”¶å›¾ç‰‡
 			type = IMAGE_DATA;
 			for (int i = 0; i < size; i++) {
 				buffer[i] = buffer[i + 10];
 			}
 			break;
-		case '*':	// ½ÓÊÕ
+		case '*':	// æ¥æ”¶
 			type = PTZINFO_DATA;
 			for (int i = 0; i < size; i++) {
 				buffer[i] = buffer[i + 10];
@@ -217,8 +214,8 @@ void SocketServerTCP::cleanup()
 	WSACleanup();
 }
 
-//--------------------ClientÇëÇó(UDP)---------------------
-bool SocketClientUDP::init(string ip, int port)
+//--------------------Clientè¯·æ±‚(UDP)---------------------
+bool SocketClientUDP::init(char *ip, int port)
 {
 	WORD sockVersion = MAKEWORD(2, 2);
 	WSADATA data;
@@ -234,7 +231,7 @@ bool SocketClientUDP::init(string ip, int port)
 	}
 	clientAddr.sin_family = AF_INET;
 	clientAddr.sin_port = htons(port);
-	clientAddr.sin_addr.S_un.S_addr = inet_addr(ip.c_str());
+	clientAddr.sin_addr.S_un.S_addr = inet_addr(ip);
 	return true;
 }
 
@@ -264,7 +261,7 @@ void SocketClientUDP::cleanup()
 	WSACleanup();
 }
 
-//--------------------Server¼àÌı(UDP)---------------------
+//--------------------Serverç›‘å¬(UDP)---------------------
 bool SocketServerUDP::init(int port)
 {
 	WORD sockVersion = MAKEWORD(2, 2);
