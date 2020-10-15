@@ -189,14 +189,14 @@ bool SocketServerTCP::receive(char *buffer, int buffer_size, SOCKETDATATYPE &typ
 				buffer[i] = buffer[i + 10];
 			}
 			break;
-		case '*':	// 接收
+		case '*':	// 接收云台信息
 			type = PTZINFO_DATA;
 			for (int i = 0; i < size; i++) {
 				buffer[i] = buffer[i + 10];
 			}
 			break;
 		case '@':
-			type = CTRL_DATA;
+			type = CTRL_DATA;	// 接收控制信号
 			for (int i = 0; i < size; i++) {
 				buffer[i] = buffer[i + 10];
 			}
