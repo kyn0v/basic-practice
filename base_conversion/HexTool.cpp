@@ -4,10 +4,10 @@ using namespace std;
 
 /***********************************
 function: IsHexChar
-desc:   ÅĞ¶Ï×Ö·ûÊÇ·ñÔÚ0-9£¬a-fÖ®¼ä
-input£º char-×Ö·û
-Output£º
-return:  ×Ö·ûË÷Òı£¬Èç8-8£¬a-10£¬Èç¹û²»ÊÇ£¬·µ»Ø-1
+desc:   åˆ¤æ–­å­—ç¬¦æ˜¯å¦åœ¨0-9ï¼Œa-fä¹‹é—´
+inputï¼š char-å­—ç¬¦
+Outputï¼š
+return:  å­—ç¬¦ç´¢å¼•ï¼Œå¦‚8-8ï¼Œa-10ï¼Œå¦‚æœä¸æ˜¯ï¼Œè¿”å›-1
 ***********************************/
 int IsHexChar(char ch)
 {
@@ -22,10 +22,10 @@ int IsHexChar(char ch)
 
 /**************************************
 function: Hex2Ascii
-desc:     ¶Ì×Ö·û´®×ª»¯asciiÂë£¨Èç"FF"->255, "01"->1£©
-Input:    hex-16½øÖÆ£¬×Ö·û´®ĞÎÊ½£¬2×Ö·û
+desc:     çŸ­å­—ç¬¦ä¸²è½¬åŒ–asciiç ï¼ˆå¦‚"FF"->255, "01"->1ï¼‰
+Input:    hex-16è¿›åˆ¶ï¼Œå­—ç¬¦ä¸²å½¢å¼ï¼Œ2å­—ç¬¦
 Output:
-return:    asciiÂë
+return:    asciiç 
 note:
 **************************************/
 unsigned char Hex2Ascii(const string &hex)
@@ -42,11 +42,11 @@ unsigned char Hex2Ascii(const string &hex)
 }
 
 /****************************************
-function£ºHexString2Int
-desc:  ³¤×Ö·û´®×ª»¯ÎªÊıÖµ(Èç"0100"->256)
-Input:    16½øÖÆ×Ö·û´®
+functionï¼šHexString2Int
+desc:  é•¿å­—ç¬¦ä¸²è½¬åŒ–ä¸ºæ•°å€¼(å¦‚"0100"->256)
+Input:    16è¿›åˆ¶å­—ç¬¦ä¸²
 Output:
-return:  ÊıÖµ
+return:  æ•°å€¼
 ****************************************/
 int HexString2Int(string hex_str)
 {
@@ -70,10 +70,10 @@ int HexString2Int(string hex_str)
 
 /****************************
 function: HexString2AsciiString
-desc:     16½øÖÆ×Ö·û´®×ª»¯ÎªasciiÂë´®(Èç"FF01"-> {255, 1} £¬×¢:´Ë´¦¹²Á½¸ö×Ö½Ú,¼´ÓÃstring±£´æ16½øÖÆÊı)
-Input:    hex-16½øÖÆ×Ö·û´®
+desc:     16è¿›åˆ¶å­—ç¬¦ä¸²è½¬åŒ–ä¸ºasciiç ä¸²(å¦‚"FF01"-> {255, 1} ï¼Œæ³¨:æ­¤å¤„å…±ä¸¤ä¸ªå­—èŠ‚,å³ç”¨stringä¿å­˜16è¿›åˆ¶æ•°)
+Input:    hex-16è¿›åˆ¶å­—ç¬¦ä¸²
 Output:
-return:  asciiÂë´®
+return:  asciiç ä¸²
 *****************************/
 string HexString2AsciiString(string hex_str)
 {
@@ -89,11 +89,11 @@ string HexString2AsciiString(string hex_str)
 }
 
 /****************************************
-function£ºAsciiString2HexString
-desc:	asciiÂë´®×ª»¯Îª16½øÖÆ×Ö·û´®(Èç£º{11, 1}->"0A01",×¢£º´Ë´¦Îª11ºÍ1¹²Á½¸ö×Ö½Ú )
-Input:	asciiÂë´®
+functionï¼šAsciiString2HexString
+desc:	asciiç ä¸²è½¬åŒ–ä¸º16è¿›åˆ¶å­—ç¬¦ä¸²(å¦‚ï¼š{11, 1}->"0A01",æ³¨ï¼šæ­¤å¤„ä¸º11å’Œ1å…±ä¸¤ä¸ªå­—èŠ‚ )
+Input:	asciiç ä¸²
 Output:
-return:	hex-16½øÖÆ×Ö·û´®
+return:	hex-16è¿›åˆ¶å­—ç¬¦ä¸²
 ****************************************/
 string AsciiString2HexString(char *ascii_ptr, int len)
 {
@@ -101,16 +101,16 @@ string AsciiString2HexString(char *ascii_ptr, int len)
 	stringstream ss;
 
 	for (string::size_type i = 0; i < len; ++i)
-		ss << hex_str[(unsigned char)ascii_ptr[i] >> 4] << hex_str[(unsigned char)ascii_ptr[i] & 0xf];	//ÏÈºóĞ´Èë¸ß4Î»ºÍµÍ4Î»
+		ss << hex_str[(unsigned char)ascii_ptr[i] >> 4] << hex_str[(unsigned char)ascii_ptr[i] & 0xf];	//ï¿½Èºï¿½Ğ´ï¿½ï¿½ï¿½4Î»ï¿½Íµï¿½4Î»
 	return ss.str();
 }
 
 /****************************************
-function£ºDec2HexString
-desc:	Ê®½øÖÆÊı×ª»¯Îª16½øÖÆ×Ö·û´®£¨Èç£º128->"80"£©
-Input:	Ê®½øÖÆÊıdec, Éú³ÉµÄ16½øÖÆ×Ö·û´®³¤¶È
+functionï¼šDec2HexString
+desc:	åè¿›åˆ¶æ•°è½¬åŒ–ä¸º16è¿›åˆ¶å­—ç¬¦ä¸²ï¼ˆå¦‚ï¼š128->"80"ï¼‰
+Input:	åè¿›åˆ¶æ•°dec, ç”Ÿæˆçš„16è¿›åˆ¶å­—ç¬¦ä¸²é•¿åº¦
 Output:
-return:	16½øÖÆ×Ö·û´®
+return:	16è¿›åˆ¶å­—ç¬¦ä¸²
 ****************************************/
 string Dec2HexString(int dec, int length)
 {
@@ -126,19 +126,19 @@ string Dec2HexString(int dec, int length)
 	return hex_output;
 }
 /*
-sprintf(s, "%08x", num) Òà¿ÉÊµÏÖÊä³ö²¹0µÄ8Î»16½øÖÆÊı
+sprintf(s, "%08x", num) äº¦å¯å®ç°è¾“å‡ºè¡¥0çš„8ä½16è¿›åˆ¶æ•°
 */
 
 /****************************************
-function£ºPrepareAsciiCmd
-desc:  È¥µô×Ö·û´®ÀïµÄ¿Õ¸ñ£¬0x¡£½«Æä×ª»»ÎªasciiÖ¸Áî(Èç: "0xFF 0x01"-> {255, 1})
-Input:    strÆÕÍ¨×Ö·û´®
+functionï¼šPrepareAsciiCmd
+desc:  å»æ‰å­—ç¬¦ä¸²é‡Œçš„ç©ºæ ¼ï¼Œ0xã€‚å°†å…¶è½¬æ¢ä¸ºasciiæŒ‡ä»¤(å¦‚: "0xFF 0x01"-> {255, 1})
+Input:    stræ™®é€šå­—ç¬¦ä¸²
 Output:
-return:  È¥µô¿Õ¸ñºÍ0x£¬²¢×ª»»ÎªasciiÖ¸ÁîÂë
+return:  å»æ‰ç©ºæ ¼å’Œ0xï¼Œå¹¶è½¬æ¢ä¸ºasciiæŒ‡ä»¤ç 
 ****************************************/
 string PrepareAsciiCmd(string str)
 {
-	//É¾³ı¿Õ¸ñ
+	//åˆ é™¤ç©ºæ ¼
 	int i = 0;
 	while (i != str.length())
 	{
@@ -147,7 +147,7 @@ string PrepareAsciiCmd(string str)
 			break;
 		str = str.erase(i, 1);
 	}
-	//É¾³ı0x
+	//åˆ é™¤0x
 	i = 0;
 	string tmp("0x");
 	while (i != str.length())
@@ -157,7 +157,7 @@ string PrepareAsciiCmd(string str)
 			break;
 		str = str.erase(i, 2);
 	}
-	//É¾³ı0X
+	//åˆ é™¤0X
 	i = 0;
 	tmp = "0X";
 	while (i != str.length())
